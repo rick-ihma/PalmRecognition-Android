@@ -258,36 +258,25 @@ public class FingerCaptureActivity extends AppCompatActivity implements HandLand
     }
 
 
-    boolean isRunning = false;
+    private volatile boolean isRunning = false;
 
     @Override
     public void onResults(HandLandmarkerHelper.ResultBundle resultBundle) {
-        Log.e("TestEngine", "onResult: " + isRunning);
+        try {
         isRunning = false;
-
         if(resultBundle.getResults().size() > 0) {
             if(m_prepared == false) {
                 if(resultBundle.getPalmResults() != null && resultBundle.getPalmResults().size() > 0) {
                     if(m_mode == 0 || m_mode == 1) {
-                        if(resultBundle.getRoiBitmap() != null) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ImageView imgView = (ImageView)findViewById(R.id.img_gallery);
-                                    imgView.setImageBitmap(resultBundle.getRoiBitmap());
-                                }
-                            });
+                        if (resultBundle.getRoiBitmap() != null) {
+                            updateImageView(resultBundle.getRoiBitmap());
                         }
+
                     } else if(m_mode == 2 || m_mode == 3) {
-                        if(resultBundle.getRoiBitmap() != null) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ImageView imgView = (ImageView)findViewById(R.id.img_gallery);
-                                    imgView.setImageBitmap(resultBundle.getRoiBitmap());
-                                }
-                            });
+                        if (resultBundle.getRoiBitmap() != null) {
+                            updateImageView(resultBundle.getRoiBitmap());
                         }
+
                     }
                     double quality = resultBundle.getPalmResults().get(0).quality;
                     this.m_quality = (quality * 2 / 3) + (this.m_quality / 3);
@@ -299,36 +288,29 @@ public class FingerCaptureActivity extends AppCompatActivity implements HandLand
             } else {
                 if(resultBundle.getPalmResults() != null && resultBundle.getPalmResults().size() > 0) {
                     if(m_mode == 0 || m_mode == 1) {
-                        if(resultBundle.getRoiBitmap() != null) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ImageView imgView = (ImageView)findViewById(R.id.img_gallery);
-                                    imgView.setImageBitmap(resultBundle.getRoiBitmap());
-                                }
-                            });
+                        if (resultBundle.getRoiBitmap() != null) {
+                            updateImageView(resultBundle.getRoiBitmap());
                         }
+
                     } else if(m_mode == 2 || m_mode == 3) {
-                        if(resultBundle.getRoiBitmap() != null) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ImageView imgView = (ImageView)findViewById(R.id.img_gallery);
-                                    imgView.setImageBitmap(resultBundle.getRoiBitmap());
-                                }
-                            });
+                        if (resultBundle.getRoiBitmap() != null) {
+                            updateImageView(resultBundle.getRoiBitmap());
                         }
+
                     }
 
                     double quality = resultBundle.getPalmResults().get(0).quality;
                     if(quality > QUALITY_THRESHOLD) {
-                        if(m_mode == 0) {
-                            String registerID = String.format("Palm User%03d", m_registerTemplates.size() + 1);
+                        if (m_mode == 0) {
+                            String registerID = String.format("User%03d", m_registerTemplates.size() + 1);
                             m_registerTemplates.put(registerID, resultBundle.getPalmResults().get(0).feature);
-
+                    
                             isFinished = true;
+                    
+                            // Pass back both registerID and feature as intent extras
                             Intent intent = new Intent();
                             intent.putExtra("registerID", registerID);
+                            intent.putExtra("palmFeature", resultBundle.getPalmResults().get(0).feature);
                             setResult(RESULT_OK, intent);
                             finish();
                         } else if(m_mode == 2) {
@@ -365,7 +347,7 @@ public class FingerCaptureActivity extends AppCompatActivity implements HandLand
                         setStatus("Hold still");
                     }
                 } else {
-                    setStatus("Palm no detected!");
+                    setStatus("no detected!");
                 }
             }
 
@@ -379,6 +361,9 @@ public class FingerCaptureActivity extends AppCompatActivity implements HandLand
                 }
             });
         }
+        } catch (Exception e) {
+            Log.e("FingerCaptureActivity", "Exception in onResults: " + e.getMessage(), e);
+        }
     }
 
     @Override
@@ -391,18 +376,17 @@ public class FingerCaptureActivity extends AppCompatActivity implements HandLand
     {
         @SuppressLint("UnsafeExperimentalUsageError")
         @Override
-        public void analyze(@NonNull ImageProxy imageProxy)
-        {
-            Log.e("TestEngine", "isRunning " + isRunning);
-            if(isRunning == true) {
-                imageProxy.close();
-                return;
+        public void analyze(@NonNull ImageProxy imageProxy) {
+            try {
+                if (isRunning) return;
+        
+                isRunning = true;
+                analyzeImage(imageProxy);
+            } finally {
+                imageProxy.close(); // Ensure it’s always executed
             }
-
-            isRunning = true;
-            analyzeImage(imageProxy);
-            imageProxy.close();
         }
+        
     }
 
     Boolean isFinished = false;
@@ -448,19 +432,23 @@ public class FingerCaptureActivity extends AppCompatActivity implements HandLand
     private void autoFocus() {
         FingerCaptureActivity.setCameraAutoFocus(m_camera, m_viewFinder.getWidth(), m_viewFinder.getHeight());
     }
+    private void updateImageView(Bitmap bitmap) {
+        runOnUiThread(() -> {
+            ImageView imgView = findViewById(R.id.img_gallery);
+            imgView.setImageBitmap(bitmap);
+        });
+    }
+    
 
     void toggleFlash(boolean enable) {
         if (m_camera != null) {
-
             CameraInfo cameraInfo = m_camera.getCameraInfo();
-            if (m_camera.getCameraInfo().hasFlashUnit() && cameraInfo.getTorchState().getValue() != null) {
-                int torchState = cameraInfo.getTorchState().getValue();
+            if (cameraInfo.hasFlashUnit() && cameraInfo.getTorchState().getValue() != null 
+                && cameraInfo.getTorchState().getValue() != (enable ? 1 : 0)) {
                 m_camera.getCameraControl().enableTorch(enable);
-                //preview.en
             }
-
-            FingerCaptureActivity.setCameraControl(m_camera);
         }
+        
     }
 
     private void setScreenBrightnessFull() {
@@ -519,13 +507,16 @@ public class FingerCaptureActivity extends AppCompatActivity implements HandLand
     protected void onDestroy() {
         super.onDestroy();
 
-        // Shut down our background executor
         backgroundExecutor.shutdown();
-        try {
-            backgroundExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-            // Handle the interruption exception if needed
-        }
+try {
+    if (!backgroundExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
+        backgroundExecutor.shutdownNow();
+    }
+} catch (InterruptedException e) {
+    backgroundExecutor.shutdownNow();
+    Thread.currentThread().interrupt();
+}
+
     }
 
 }

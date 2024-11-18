@@ -10,4 +10,5 @@
 
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryTrans">#AA00FF00</color>
+    <color name="colorEver">#2ac427</color>
 </resources>

@@ -1,61 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!-- First Button (Top-Left) -->
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_margin="8dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/colorEver"
+        android:text="Register"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintBottom_toTopOf="@+id/btnWriterRegister"
+        app:layout_constraintEnd_toStartOf="@+id/btnVerify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Second Button (Top-Right) -->
+    <Button
+        android:id="@+id/btnVerify"
+        android:layout_margin="8dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/colorEver"
+        android:text="Verify"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintBottom_toTopOf="@+id/btnWriterVerify"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnRegister"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btnRegister"
-            android:layout_width="160dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="30dp"
-            android:layout_centerHorizontal="true"
-            android:text="Palm Register" />
+    <!-- Third Button (Bottom-Left) -->
+    <Button
+        android:id="@+id/btnWriterRegister"
+        android:layout_margin="8dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/colorEver"
+        android:text="Writer Register"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintBottom_toTopOf="@+id/btnStartSession"
+        app:layout_constraintEnd_toStartOf="@+id/btnWriterVerify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
 
-        <Button
-            android:id="@+id/btnVerify"
-            android:layout_width="160dp"
-            android:layout_height="80dp"
-            android:layout_below="@+id/btnRegister"
-            android:layout_marginTop="30dp"
-            android:layout_centerHorizontal="true"
-            android:text="Palm Verify" />
+    <!-- Fourth Button (Bottom-Right) -->
+    <Button
+        android:id="@+id/btnWriterVerify"
+        android:layout_margin="8dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/colorEver"
+        android:text="Writer Verify"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintBottom_toTopOf="@+id/btnStartSession"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnWriterRegister"
+        app:layout_constraintTop_toBottomOf="@+id/btnVerify" />
 
-        <Button
-            android:id="@+id/btnWriterRegister"
-            android:layout_width="160dp"
-            android:layout_height="80dp"
-            android:layout_below="@+id/btnVerify"
-            android:layout_marginTop="30dp"
-            android:layout_centerHorizontal="true"
-            android:text="Writer Register" />
-
-        <Button
-            android:id="@+id/btnWriterVerify"
-            android:layout_width="160dp"
-            android:layout_height="80dp"
-            android:layout_below="@+id/btnWriterRegister"
-            android:layout_marginTop="30dp"
-            android:layout_centerHorizontal="true"
-            android:text="Writer Verify" />
-
-        <TextView
-            android:id="@+id/txtState"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="30dp"
-            android:textAlignment="center"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:textSize="25dp"/>
-
-    </RelativeLayout>
-
+    <!-- Start/Stop Session Button -->
+    <Button
+        android:id="@+id/btnStartSession"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Session"
+        app:layout_constraintTop_toBottomOf="@+id/btnWriterRegister"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
