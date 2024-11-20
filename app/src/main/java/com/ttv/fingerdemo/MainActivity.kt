@@ -42,11 +42,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Verify Button
-        findViewById<Button>(R.id.btnVerify).setOnClickListener {
-            if (checkAndRequestPermissions()) {
-                openFingerCaptureActivity(1) // Mode 1: Verify
-            }
-        }
+        // findViewById<Button>(R.id.btnVerify).setOnClickListener {
+        //     if (checkAndRequestPermissions()) {
+        //         openFingerCaptureActivity(1) // Mode 1: Verify
+        //     }
+        // }
 
         // Writer Register Button
         findViewById<Button>(R.id.btnWriterRegister).setOnClickListener {
@@ -55,12 +55,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Writer Verify Button
-        findViewById<Button>(R.id.btnWriterVerify).setOnClickListener {
-            if (checkAndRequestPermissions()) {
-                openFingerCaptureActivity(3) // Mode 3: Writer Verify
-            }
-        }
+        // // Writer Verify Button
+        // findViewById<Button>(R.id.btnWriterVerify).setOnClickListener {
+        //     if (checkAndRequestPermissions()) {
+        //         openFingerCaptureActivity(3) // Mode 3: Writer Verify
+        //     }
+        // }
 
         // Start/Stop Session Button
         val btnStartSession = findViewById<Button>(R.id.btnStartSession)
@@ -151,37 +151,44 @@ private fun stopSession(button: Button) {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-    
+
     if (data == null) {
         Log.e("onActivityResult", "No data returned.")
         return
     }
+    Log.d("onActivityResult", "requestCode: $requestCode, resultCode: $resultCode")
 
-    if (requestCode == 1 && resultCode == RESULT_OK) { // Register
+    if (requestCode == 1 && resultCode == RESULT_OK) { // Patient Register
         val registerID = data.getStringExtra("registerID")
         val palmFeature = data.getByteArrayExtra("palmFeature")
-        Log.d("palmFeature", "palmFeature $palmFeature")
+        Log.d("onActivityResult", "registerID: $registerID, palmFeature: $palmFeature")
         if (registerID != null && palmFeature != null) {
             m_registerTemplates[registerID] = palmFeature
             Log.d("Registration", "User $registerID successfully registered.")
-            Toast.makeText(this, "Register succeed! $registerID", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Patient Register succeed! $registerID", Toast.LENGTH_SHORT).show()
         } else {
-            Log.e("Registration", "Failed to register user. Data missing.")
+            Log.e("Registration", "Failed to register patient. Data missing.")
         }
-    } else if (requestCode == 2 && resultCode == RESULT_OK) { // Verify
-        val verifyResult = data.getIntExtra("verifyResult", 0)
-        val verifyID = data.getStringExtra("verifyID")
-        if (verifyResult == 1 && verifyID != null) {
-            handleVerification(verifyID)
+    } else if (requestCode == 2 && resultCode == RESULT_OK) { // Writer Register
+        val registerID = data.getStringExtra("registerID")
+        val palmFeature = data.getByteArrayExtra("palmFeature")
+        
+    Log.d("onActivityResult", "registerID: $registerID, palmFeature: $palmFeature")
+        Log.d("palmFeature", "palmFeature $palmFeature")
+        if (registerID != null && palmFeature != null) {
+            m_registerTemplates[registerID] = palmFeature
+            Log.d("Writer Registration", "Writer $registerID successfully registered.")
+            Toast.makeText(this, "Writer Register succeed! $registerID", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(this, "Verify failed!", Toast.LENGTH_SHORT).show()
+            Log.e("Writer Registration", "Failed to register writer. Data missing.")
         }
     } else {
         Log.e("onActivityResult", "Unexpected requestCode or resultCode.")
     }
 }
+
 
 private fun handleVerification(userId: String) {
     val sessionStartTime = sessionStartTimestamp

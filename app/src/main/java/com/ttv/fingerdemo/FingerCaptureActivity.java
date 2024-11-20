@@ -320,6 +320,7 @@ public class FingerCaptureActivity extends AppCompatActivity implements HandLand
                             isFinished = true;
                             Intent intent = new Intent();
                             intent.putExtra("registerID", registerID);
+                            intent.putExtra("palmFeature", resultBundle.getPalmResults().get(0).feature);
                             setResult(RESULT_OK, intent);
                             finish();
                         } else {

@@ -8,70 +8,44 @@
     android:background="@color/white"
     tools:context=".MainActivity">
 
-    <!-- First Button (Top-Left) -->
+    <!-- Patient Register Button -->
     <Button
         android:id="@+id/btnRegister"
-        android:layout_margin="8dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_margin="8dp"
         android:backgroundTint="@color/colorEver"
-        android:text="Register"
-        app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintBottom_toTopOf="@+id/btnWriterRegister"
-        app:layout_constraintEnd_toStartOf="@+id/btnVerify"
+        android:text="Patient Register"
+        app:layout_constraintWidth_percent="0.45"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/btnWriterRegister" />
 
-    <!-- Second Button (Top-Right) -->
-    <Button
-        android:id="@+id/btnVerify"
-        android:layout_margin="8dp"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:backgroundTint="@color/colorEver"
-        android:text="Verify"
-        app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintBottom_toTopOf="@+id/btnWriterVerify"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnRegister"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Third Button (Bottom-Left) -->
+    <!-- Nurse Register Button -->
     <Button
         android:id="@+id/btnWriterRegister"
-        android:layout_margin="8dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:backgroundTint="@color/colorEver"
-        android:text="Writer Register"
-        app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintBottom_toTopOf="@+id/btnStartSession"
-        app:layout_constraintEnd_toStartOf="@+id/btnWriterVerify"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
-
-    <!-- Fourth Button (Bottom-Right) -->
-    <Button
-        android:id="@+id/btnWriterVerify"
         android:layout_margin="8dp"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
         android:backgroundTint="@color/colorEver"
-        android:text="Writer Verify"
-        app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintBottom_toTopOf="@+id/btnStartSession"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnWriterRegister"
-        app:layout_constraintTop_toBottomOf="@+id/btnVerify" />
+        android:text="Nurse Register"
+        app:layout_constraintWidth_percent="0.45"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnRegister"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Start/Stop Session Button -->
     <Button
         android:id="@+id/btnStartSession"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorEver"
         android:text="Start Session"
-        app:layout_constraintTop_toBottomOf="@+id/btnWriterRegister"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegister"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
